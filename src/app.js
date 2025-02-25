@@ -41,6 +41,33 @@ app.get("/feed",async (req,res)=>{
         res.status(400).send("Error in fetching users")
     }
 });
+app.delete("/user",async (req,res)=>{
+    const userId=req.body.userId;
+    try{
+    const user=await User.findByIdAndDelete({_id:userId});
+    if(!user){
+        res.status(404).send("User not found")
+    }else{
+        res.send("user deleted successfully");
+    }
+    }catch(err){
+        res.status(400).send("Error in deleting user",err.message)
+    }
+});
+app.patch("/user",async (req,res)=>{
+    const userId=req.body.userId;
+    const data=req.body;
+    try{
+        const user=await User.findByIdAndUpdate(userId,data,{returnDocument:'after'});
+        console.log('user: ', user);
+        if(!user){
+            res.status(404).send("User not found")
+        }
+        res.send("user updated successfully")
+    }catch(err){
+
+    }
+})
 connectDB()
 .then(()=>{
     console.log("Database connected")
