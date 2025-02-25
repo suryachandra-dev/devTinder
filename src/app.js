@@ -4,15 +4,10 @@ const express = require("express");
 const app = express();
 const connectDB=require("./config/database.js");
 const User=require("./models/user.js");
+//it will work for all the routes in the application
+app.use(express.json());
 app.post("/signup",async (req,res)=>{
-    const userObj={
-        firstName:"Sachin",
-        lastName:"Tendulkar",
-        emailId:"sachin@gmail.com",
-        password:"sachin123",
-        age:45,
-        gender:"male",
-    }
+    const userObj=req.body;
     //creating a new instance of a userModel
     const user=new User(userObj);
     try{
