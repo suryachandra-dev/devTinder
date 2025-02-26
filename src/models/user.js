@@ -1,4 +1,5 @@
 const mongoose=require("mongoose");
+const validator=require("validator");
 const userSchema=new mongoose.Schema({
     firstName:{
         type:String,
@@ -15,10 +16,20 @@ const userSchema=new mongoose.Schema({
         unique:true,
         lowercase:true,//Automatically converts emails to lowercase
         trim:true,//Automatically removes extra spaces from the beginning and end of the string
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error("Invalid Email Id")
+            } 
+        }
     },
     password:{
         type:String,
         required:true,
+        validate(value){
+            if(!validator.isStrongPassword(value)){
+                throw new Error("Password is weak")
+            }
+        }
     },
     age:{
         type:Number,
@@ -37,7 +48,12 @@ const userSchema=new mongoose.Schema({
     },
     photourl:{
         type:String,
-        default:"https://www.mpgi.edu.in/wp-content/uploads/2024/01/13testi_dummy-convert.io_.webp"
+        // default:"https://www.mpgi.edu.in/wp-content/uploads/2024/01/13testi_dummy-convert.io_.webp",
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error("Invalid Photo URL"+value)
+            }
+        }
     },
     about:{
         type:String,
