@@ -15,7 +15,7 @@ app.post("/signup",async (req,res)=>{
         await user.save();
         res.send("user Added successfully")
     }catch(err){
-        res.status(400).send("Error in adding user",err.message);
+        res.status(400).send({message:"Error in adding user",error:err.message});
     } 
 });
 //Get user by EmailID
@@ -58,14 +58,14 @@ app.patch("/user",async (req,res)=>{
     const userId=req.body.userId;
     const data=req.body;
     try{
-        const user=await User.findByIdAndUpdate(userId,data,{returnDocument:'after'});
+        const user=await User.findByIdAndUpdate(userId,data,{returnDocument:'after',runValidators:true});
         console.log('user: ', user);
         if(!user){
             res.status(404).send("User not found")
         }
         res.send("user updated successfully")
     }catch(err){
-
+        res.status(400).send("Error in updating user "+err.message);
     }
 })
 connectDB()
