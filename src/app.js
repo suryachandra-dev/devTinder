@@ -4,14 +4,24 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/database.js");
 const User = require("./models/user.js");
+const { validateSignUpData ,emailValidation} = require("./utils/validation.js");
+const bcrypt=require("bcrypt");
 //it will work for all the routes in the application
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-  const userObj = req.body;
-  //creating a new instance of a userModel
-  const user = new User(userObj);
   try {
+    //validation of data
+    validateSignUpData(req);   
+    const {password}=req.body;
+    //Encrypt the password
+    const passwordHash=await bcrypt.hash(password,10);
+    console.log('passwordHash: ', passwordHash);
+    const {firstName,lastName,emailId} = req.body;
+    //creating a new instance of a userModel
+    const user = new User({
+        firstName,lastName,emailId,password:passwordHash
+    });
     await user.save();
     res.send("user Added successfully");
   } catch (err) {
@@ -20,6 +30,24 @@ app.post("/signup", async (req, res) => {
       .send({ message: "Error in adding user", error: err.message });
   }
 });
+app.post("/login",async (req,res)=>{
+    try{
+        //Extract emailId,password from the request body
+        const {emailId,password}=req.body;
+        emailValidation(emailId);
+        const user=await User.findOne({emailId});
+        if(!user){
+            throw new Error("Invalid Credentials")
+        }
+        const isPasswordValid=await bcrypt.compare(password, user.password);
+        if(!isPasswordValid){
+            throw new Error("Invalid Credentials")
+        }
+        res.send("Login Successful");
+    }catch(err){
+        res.status(400).send("Error in Login "+err.message);
+    }
+})
 //Get user by EmailID
 app.get("/user", async (req, res) => {
   const userEmail = req.body.emailId;
@@ -85,8 +113,8 @@ app.patch("/user/:userId", async (req, res) => {
     if (!isUpdateAllowed) {
       throw new Error("Update not allowed");
     }
-    if(data?.skills.length>10){
-        throw new Error("Skills cannot be more than 10")
+    if (data?.skills.length > 10) {
+      throw new Error("Skills cannot be more than 10");
     }
     const user = await User.findByIdAndUpdate(userId, data, {
       returnDocument: "after",

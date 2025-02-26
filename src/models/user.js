@@ -64,15 +64,6 @@ const userSchema=new mongoose.Schema({
     },
     
 },{timestamps:true});
-//function to convert date to IST
-function toIST(date){
-    return new Date(date.getTime()+(5.5*60*60*1000))
-}
-//pre-update hook to adjust updatedAt to IST
-userSchema.pre('findOneAndUpdate',function(next){
-    this.set({updatedAt: toIST(new Date())});
-    next();
-});
 //I want User Model for userSchema.Model is like a class which starts with a capital letter.Using User Model you can create new instances of that model.
 //Ex:const user1=new userModel({firstName:"Rahul",lastName:"Sharma",emailId:"rahul@gmail.com",password:"rahul123",age:23,gender:"Male"});
 module.exports=mongoose.model("User",userSchema);
