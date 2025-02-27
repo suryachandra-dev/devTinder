@@ -64,6 +64,24 @@ const userSchema=new mongoose.Schema({
     },
     
 },{timestamps:true});
+const jwt=require("jsonwebtoken");
+const bcrypt=require("bcrypt");
+
 //I want User Model for userSchema.Model is like a class which starts with a capital letter.Using User Model you can create new instances of that model.
 //Ex:const user1=new userModel({firstName:"Rahul",lastName:"Sharma",emailId:"rahul@gmail.com",password:"rahul123",age:23,gender:"Male"});
+
+//We use regular function instead of a arrow function because we need the this.And this refers to which user has called the getJWT method.
+userSchema.methods.getJWT=async function(){
+    const user=this;
+        //create a JWT Token
+    // jwt.sign(payload, secretOrPrivateKey, [options, callback])
+    const token=await jwt.sign({ _id: user._id }, "DEVTinder&26022025",{expiresIn:"1d"}); //Server generates token with jwt.sign.
+    return token;
+}
+userSchema.methods.validatePassword=async function(passwordInputByUser){
+    const user=this;
+    const hashedPassword=user.password;
+    const isPasswordValid=await bcrypt.compare(passwordInputByUser,hashedPassword);//bcrypt.compare takes two arguments.1st is the password which is entered by the user and 2nd is the hashedPassword which is stored in the database.
+    return isPasswordValid;
+}
 module.exports=mongoose.model("User",userSchema);
