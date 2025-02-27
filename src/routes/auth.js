@@ -47,10 +47,19 @@ authRouter.post("/login", async (req, res) => {
       const token = await user.getJWT();
       console.log("token: ", token);
       //Add the JWT token to cookie and send the response back to the user
-      res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000) });
+      res.cookie("authToken", token, { expires: new Date(Date.now() + 8 * 3600000) });
       res.send("Login Successful");
     } catch (err) {
       res.status(400).send("Error in Login " + err.message);
     }
   });
+authRouter.post("/logout",async (req,res)=>{
+    try{
+      res.cookie("authToken",null,{
+        expires:new Date(Date.now()),
+      }).send("Logout Successful");
+    }catch(err){
+      res.status(400).send("Error in logout");
+    }
+})
 module.exports={authRouter};

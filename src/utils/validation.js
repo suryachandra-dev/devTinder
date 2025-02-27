@@ -10,9 +10,18 @@ const validateSignUpData=(req)=>{
         throw new Error("Weak Password")
     }
 }
+const validateEditProfileData=(req,res)=>{
+    const allowedEditFields=["firstName","lastName","photourl","gender","age","about","skills"];
+    console.log(req.body);
+    const listOfKeys=Object.keys(req.body);
+    const isEditAllowed=listOfKeys.every(k=>
+        allowedEditFields.includes(k)
+    );
+    return isEditAllowed;
+}
 const emailValidation=(emailId)=>{
     if(!validator.isEmail(emailId)){
         throw new Error("Invalid email Id");
     }
 }
-module.exports={validateSignUpData,emailValidation};
+module.exports={validateSignUpData,emailValidation,validateEditProfileData};
