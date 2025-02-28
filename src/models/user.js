@@ -6,6 +6,7 @@ const userSchema=new mongoose.Schema({
         required:true,
         minLength:4,
         maxLength:20,
+        index:true,
     },
     lastName:{
         type:String,
@@ -44,7 +45,10 @@ const userSchema=new mongoose.Schema({
         //     }
         // },
         //Option 2 to validate the value
-        enum:["male","female","other"],
+        enum:{
+           values: ["male","female","other"],
+           message:`{VALUE} is incorrect gender type`
+        }
     },
     photourl:{
         type:String,
@@ -67,8 +71,7 @@ const userSchema=new mongoose.Schema({
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 
-//I want User Model for userSchema.Model is like a class which starts with a capital letter.Using User Model you can create new instances of that model.
-//Ex:const user1=new userModel({firstName:"Rahul",lastName:"Sharma",emailId:"rahul@gmail.com",password:"rahul123",age:23,gender:"Male"});
+// userSchema.index({firstName:1,lastName:1});//This is used to create a compound index on firstName and lastName fields.
 
 //We use regular function instead of a arrow function because we need the this.And this refers to which user has called the getJWT method.
 userSchema.methods.getJWT=async function(){
@@ -84,4 +87,7 @@ userSchema.methods.validatePassword=async function(passwordInputByUser){
     const isPasswordValid=await bcrypt.compare(passwordInputByUser,hashedPassword);//bcrypt.compare takes two arguments.1st is the password which is entered by the user and 2nd is the hashedPassword which is stored in the database.
     return isPasswordValid;
 }
+
+//I want User Model for userSchema.Model is like a class which starts with a capital letter.Using User Model you can create new instances of that model.
+//Ex:const user1=new userModel({firstName:"Rahul",lastName:"Sharma",emailId:"rahul@gmail.com",password:"rahul123",age:23,gender:"Male"});
 module.exports=mongoose.model("User",userSchema);

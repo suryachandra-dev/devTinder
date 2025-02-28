@@ -12,7 +12,7 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 app.use("/",authRouter);
 app.use("/profile",profileRouter);
-app.use("/requests",requestRouter);
+app.use("/request",requestRouter);
 connectDB()
   .then(() => {
     console.log("Database connected");
