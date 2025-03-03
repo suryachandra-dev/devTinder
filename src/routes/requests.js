@@ -13,7 +13,6 @@ requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
       if(!allowedStatus.includes(status)){
         throw new Error("Invalid status "+status);
       }
-
       //Check if the userId exixts in user collection
       const toUser=await User.findById(toUserId);
       if(!toUser){
@@ -38,4 +37,37 @@ requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
       res.status(400).send("Error " + err.message);
     }
   });
+  //request/review/accepted/612f6f9b8b6f7d5e8b6f7d5e
+  //request/review/rejected/612f6f9b8b6f7d5e8b6f7d5e
+  //Elon musk has called the above API and can tell the backend to either accept or reject the requestID
+requestRouter.post("/review/:status/:requestId",userAuth,async (req,res)=>{
+  try{
+    const loggedInUser=req.user;
+    const allowedStatus=["accepted","rejected"];
+    const {status,requestId}=req.params;
+    if(!allowedStatus.includes(status)){
+      throw new Error("Invalid Status ");
+    }
+    const connectionRequest=await ConnectionRequest.findOne({_id:requestId,toUserId:loggedInUser._id,status:"interested"});
+    if(!connectionRequest){
+      throw new Error("Connection Request is not found Or Connection is already validated");
+    }
+    connectionRequest.status=status;
+    const data=await connectionRequest.save();
+    res.json({
+      message:"Connection Request is "+status,
+      data,
+    })
+    //Validate the status
+    /**
+     * Akshay =>(sends connection request to) Elon
+     * Is Elon Musk a loggedIn User===toUserId
+     * status=interested
+     * requestId should be valid
+     */
+  }catch(err){
+    res.status(400).send("Error "+err.message);
+  }
+});
+
 module.exports={requestRouter};

@@ -9,10 +9,12 @@ const {requestRouter}=require("./routes/requests.js");
 //it will work for all the routes in the application
 app.use(express.json());
 const cookieParser = require("cookie-parser");
+const { userRouter } = require("./routes/user.js");
 app.use(cookieParser());
 app.use("/",authRouter);
 app.use("/profile",profileRouter);
 app.use("/request",requestRouter);
+app.use("/user",userRouter);
 connectDB()
   .then(() => {
     console.log("Database connected");
