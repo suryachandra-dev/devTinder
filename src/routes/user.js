@@ -68,8 +68,8 @@ userRouter.get("/feed", userAuth, async (req, res) => {
      * Elon=[Mark,Donald,MS Dhoni,Virat,Akshay]
      * */
     const loggedInUser = req.user;
-    const page=parseInt(req.query.page)  || 1;
-    let limit=parseInt(req.query.limit) || 10;
+    const page=Math.max(1,parseInt(req.query.page)  || 1);
+    let limit=Math.min(50,Math.max(1,parseInt(req.query.limit)  || 10));
     limit=limit>50 ? 50:limit;
     const skip=(page-1)*limit;
     //Find all connection Requests either i have sent or i have recieved(sent+received)
