@@ -6,6 +6,12 @@ const connectDB = require("./config/database.js");
 const {authRouter}=require("./routes/auth.js");
 const {profileRouter}=require("./routes/profile.js");
 const {requestRouter}=require("./routes/requests.js");
+const cors=require("cors");
+let corsOptions = {
+  origin: "http://localhost:5173", // Allow requests only from this origin (your frontend)
+  credentials: true,               // ✅ Allow browser to send/receive cookies
+};
+app.use(cors(corsOptions));         // Enable CORS with these settings
 //it will work for all the routes in the application
 app.use(express.json());
 const cookieParser = require("cookie-parser");
