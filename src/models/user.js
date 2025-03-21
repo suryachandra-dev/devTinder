@@ -32,10 +32,11 @@ const userSchema=new mongoose.Schema({
             }
         }
     },
-    age:{
-        type:Number,
-        min:18,
-    },
+    age: {
+        type: Number,
+        min: [18, "Age must be at least 18 years old."], // ✅ Custom error message
+    }
+    ,
     gender:{
         type:String,
         //Option 1 to validate the value
