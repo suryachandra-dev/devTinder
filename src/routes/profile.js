@@ -24,7 +24,7 @@ profileRouter.patch("/edit",userAuth,async (req,res)=>{
     await loggedInUser.save();
     res.json({"message":` ${loggedInUser.firstName} Profile edited successfully`, "user":loggedInUser});
   }catch(err){
-    res.status(400).send("Error in editing profile " +err.message)
+    res.status(400).send(err.message)
   }
 })
 module.exports={profileRouter};
