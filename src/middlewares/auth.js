@@ -8,7 +8,7 @@ const userAuth = async (req, res, next) => {
       return res.status(401).send("User not authenticated,Please Login");
     }
     //validate user token
-    const decodedMessage = await jwt.verify(authToken, "DEVTinder&26022025");
+    const decodedMessage = await jwt.verify(authToken, process.env.JWT_SECRET);
     // It contains the payload of the user
     // decodedMessage={ _id: '67bf00d47bfd3985dd2e8450', iat: 1740580102 }
     const { _id } = decodedMessage; //I got the information about the logged in user

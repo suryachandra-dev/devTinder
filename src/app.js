@@ -1,3 +1,4 @@
+require("dotenv").config(); // 👈 load .env variables
 //import the express module
 const express = require("express");
 //create an instance of express server
