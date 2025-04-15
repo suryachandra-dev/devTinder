@@ -8,6 +8,7 @@ const {authRouter}=require("./routes/auth.js");
 const {profileRouter}=require("./routes/profile.js");
 const {requestRouter}=require("./routes/requests.js");
 const cors=require("cors");
+require("./utils/cronJob.js");
 let corsOptions = {
   origin: "http://localhost:5173", // Allow requests only from this origin (your frontend)
   credentials: true,               // ✅ Allow browser to send/receive cookies

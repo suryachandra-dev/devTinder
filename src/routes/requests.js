@@ -31,7 +31,7 @@ requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
       });
       const data=await connectionRequest.save();
       console.log("........................................................");
-      const emailRes=await sendEmail.run("A New friend request from  "+req?.user?.firstName,req?.user?.firstName+" is "+status+" in "+toUser?.firstName);//send email
+      const emailRes=await sendEmail.run("A New friend request from  "+req?.user?.firstName,req?.user?.firstName+" is "+status+" in "+toUser?.firstName,toUser?.email);//send email
       console.log('emailRes: ', emailRes);
       res.json({
         message:req.user.firstName+" is "+status+" in "+toUser.firstName,
