@@ -51,6 +51,13 @@ const userSchema=new mongoose.Schema({
            message:`{VALUE} is incorrect gender type`
         }
     },
+    isPremium:{
+        type:Boolean,
+        default:false
+    },
+    memberShipType:{
+        type:String,
+    },
     photourl:{
         type:String,
         // default:"https://www.mpgi.edu.in/wp-content/uploads/2024/01/13testi_dummy-convert.io_.webp",

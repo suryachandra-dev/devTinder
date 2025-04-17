@@ -7,6 +7,7 @@ const connectDB = require("./config/database.js");
 const {authRouter}=require("./routes/auth.js");
 const {profileRouter}=require("./routes/profile.js");
 const {requestRouter}=require("./routes/requests.js");
+const {paymentRouter}=require("./routes/payment.js");
 const cors=require("cors");
 require("./utils/cronJob.js");
 let corsOptions = {
@@ -23,6 +24,7 @@ app.use("/",authRouter);
 app.use("/profile",profileRouter);
 app.use("/request",requestRouter);
 app.use("/user",userRouter);
+app.use("/payment",paymentRouter);
 connectDB()
   .then(() => {
     console.log("Database connected");
