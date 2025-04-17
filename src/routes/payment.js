@@ -64,7 +64,7 @@ paymentRouter.post("/webhook", async (req, res) => {
     //Razorpay External will call to this api .so we should no put userAuth middleware.
     try {
         /* NODE SDK: https://github.com/razorpay/razorpay-node */
-        const webhookSignature = req.headers['x-razorpay-signature'];
+        const webhookSignature = req.get('x-razorpay-signature');
         const isWebhookValid = validateWebhookSignature(JSON.stringify(req.body), webhookSignature, process.env.RAZORPAY_WEBHOOK_SECRET);
         if (!isWebhookValid) {
             return res.status(500).json({ message: "Webhook Signature  is not valid" });
